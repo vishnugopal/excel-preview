@@ -4,7 +4,7 @@ excel-preview is a small C command-line tool to preview xls or xlsx files.
 
 It outputs the sheet name and the first ten rows from each Excel sheet.
 
-$ excel-preview /path/to/file.xls
+$ excel-preview /path/to/file.xls(x)
 Sheet: Sheet1
 9822382285  Vishnu  9822382286                
 9822382315  Gopal 9822382316                
@@ -18,6 +18,10 @@ Sheet: Sheet1
 9822382507    9822382508                
 
 (Each sheet begins with Sheet: and columns are separated by \t. Should be easy to parse!)
+
+## IMPORTANT NOTE
+
+Unless you buy the full version of libxl, this utility will output garbage to your console. You have been warned.
 
 ## Install
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <libxl.h>
+#include <string.h>
 
 #define HELP_TEXT "Usage: excel-preview /path/to/file.\n"
 #define MAX_ROW 10
@@ -15,7 +16,7 @@ void error(BookHandle* book)
 void cell_contents_as_string(char* buffer, SheetHandle sheet, int row, int col) {
   int cell_type = xlSheetCellType(sheet, row, col);
   if(cell_type == CELLTYPE_EMPTY) {
-    strlcpy(buffer, "");
+    strlcpy(buffer, "", 1);
   } else if(cell_type == CELLTYPE_NUMBER) {
     snprintf(buffer, 30, "%ld", (long)xlSheetReadNum(sheet, row, col, 0));
   } else if (cell_type == CELLTYPE_STRING) {
@@ -50,9 +51,35 @@ void preview_sheet(BookHandle book, int sheet_number)
   }
 }
 
+void strtolower(char *str) {
+  while(*str != 0) {
+    if (*str >= 'A' && *str <= 'Z') {
+      *str = *str + 'a' - 'A';
+    }
+    str++;
+  }
+}
+
+BookHandle book_from_file_path(const char* file_path) {
+  char extension[3];
+  int length = strlen(file_path);
+
+  //Copy last four characters
+  strlcpy(extension, file_path + length - 4, 5);
+
+  strtolower(extension);
+
+  if(strncmp(extension, "xlsx", 4) == 0) {
+    return xlCreateXMLBook();
+  } else {
+    return xlCreateBook();
+  }
+}
+
 void preview(char* file_path)
 {
-  BookHandle book = xlCreateBook();
+  book_from_file_path(file_path);
+  BookHandle book = book_from_file_path(file_path);
   if(book) {
     if(xlBookLoad(book, file_path)) {
       int sheet_count, i;
