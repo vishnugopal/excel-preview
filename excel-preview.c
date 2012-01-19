@@ -29,8 +29,8 @@ void print_cell_contents(SheetHandle sheet, int row, int col)
   cell_contents_as_string(buffer, sheet, row, col);
   if(*buffer && *buffer != '\0') {
     printf("%s", buffer);
-    printf("\t");
   }
+  printf("\t");
 }
 
 void preview_sheet(BookHandle book, int sheet_number)
@@ -62,6 +62,9 @@ void preview(char* file_path)
       for(i = 0; i < sheet_count; i++) {
         preview_sheet(book, i);
       }
+    } else {
+      printf("Cannot load: %s\n", file_path);
+      printf(HELP_TEXT);
     }
    
     xlBookRelease(book);
