@@ -9,3 +9,9 @@ excel-preview: excel-preview.c ./libxl/lib/libxl.dylib /usr/local/lib/libxl.dyli
 clean:
 	rm excel-preview
 	rm /usr/local/lib/libxl.dylib
+
+install: all
+	install -C excel-preview /usr/bin
+
+uninstall:
+	rm /usr/bin/excel-preview

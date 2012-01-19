@@ -33,23 +33,34 @@ void print_cell_contents(SheetHandle sheet, int row, int col)
   }
 }
 
+void preview_sheet(BookHandle book, int sheet_number)
+{
+  SheetHandle sheet = xlBookGetSheet(book, sheet_number);
+  if(sheet) {
+    int j, k;
+
+    printf("Sheet: %s\n", xlSheetName(sheet));
+
+    for(j = 0; j < MAX_ROW; j++) {
+      for(k = 0; k < MAX_COL; k++) {
+        print_cell_contents(sheet, j, k);
+      }
+      printf("\n");
+    }
+  }
+}
+
 void preview(char* file_path)
 {
   BookHandle book = xlCreateBook();
   if(book) {
     if(xlBookLoad(book, file_path)) {
-      SheetHandle sheet = xlBookGetSheet(book, 0);
-      if(sheet) {
-        int i, j;
+      int sheet_count, i;
 
-        for(i = 0; i < MAX_ROW; i++) {
-          for(j = 0; j < MAX_COL; j++) {
-            print_cell_contents(sheet, i, j);
-          }
-          printf("\n");
-        }
-        
-        error(&book);
+      sheet_count = xlBookSheetCount(book);
+
+      for(i = 0; i < sheet_count; i++) {
+        preview_sheet(book, i);
       }
     }
    
